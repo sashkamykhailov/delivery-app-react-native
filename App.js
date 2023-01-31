@@ -1,3 +1,4 @@
+import React from 'react';
 import { StatusBar } from "expo-status-bar";
 import {
   Image,
@@ -9,8 +10,28 @@ import {
 } from "react-native";
 import Categories from "./components/Categories";
 import FeaturedRow from "./components/FeaturedRow";
+import {useNavigation} from '@react-navigation/native'
+import sanityClient from './sanity';
 
 export default function App() {
+
+  const navigation = useNavigation();
+
+  const [featuredCategories, setFeaturedCategories] = React.useState([]);
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false
+    })
+  }, [])
+
+  React.useEffect(() => {
+    sanityClient.fetch(``).then(data => setFeaturedCategories(data))
+
+  }, [])
+
+
+
   return (
     <SafeAreaView className="pt-5 bg-white">
       {/* Header */}
