@@ -1,8 +1,36 @@
 import { View, Text, ScrollView } from "react-native";
 import React from "react";
 import RestaurantCard from "./RestaurantCard";
+import client from "../sanity";
 
-const FeaturedRow = ({ title, description, id }) => {
+const FeaturedRow = ({ title, description, id, restaurantGenre }) => {
+  const [restaurants, setRestaurants] = React.useState([]);
+
+  React.useEffect(() => {
+    client
+      .fetch(
+        `
+      *[_type == "featured" && _id == $id] {
+        ...,
+        restaurants[]->{
+          ...,
+          dishes[]->,
+          type-> {
+            name
+          }
+        },
+      }[0]
+    `,
+        { id }
+      )
+      .then((data) => {
+        setRestaurants(data?.restaurants);
+      })
+      .catch((err) => {
+        console.log("Err at Featured Row:", err);
+      });
+  }, [id]);
+
   return (
     <View>
       <View className="mt-4 flex-row items-center justify-between ">
@@ -16,57 +44,21 @@ const FeaturedRow = ({ title, description, id }) => {
         showsHorizontalScrollIndicator={false}
         className="pt-4"
       >
-        <RestaurantCard
-          id={123}
-          imgUrl="https://www.justonecookbook.com/wp-content/uploads/2020/01/Sushi-Rolls-Maki-Sushi-%E2%80%93-Hosomaki-1106-II.jpg"
-          title="Yo! Sushi"
-          rating={4.5}
-          genre="Japanese"
-          address="123 Main St."
-          shortDescription="Very famous sushi from UK"
-          dishes={[]}
-          long={20}
-          lat={0}
-        />
-
-        <RestaurantCard
-          id={123}
-          imgUrl="https://cdn.aniagotuje.com/pictures/articles/2022/08/31553101-v-1080x1080.jpg"
-          title="Yo! Sushi"
-          rating={4.5}
-          genre="Japanese"
-          address="123 Main St."
-          shortDescription="Very famous sushi from UK"
-          dishes={[]}
-          long={20}
-          lat={0}
-        />
-
-        <RestaurantCard
-          id={123}
-          imgUrl="https://www.justonecookbook.com/wp-content/uploads/2020/01/Sushi-Rolls-Maki-Sushi-%E2%80%93-Hosomaki-1106-II.jpg"
-          title="Yo! Sushi"
-          rating={4.5}
-          genre="Japanese"
-          address="123 Main St."
-          shortDescription="Very famous sushi from UK"
-          dishes={[]}
-          long={20}
-          lat={0}
-        />
-
-        <RestaurantCard
-          id={123}
-          imgUrl="https://cdn.aniagotuje.com/pictures/articles/2022/08/31553101-v-1080x1080.jpg"
-          title="Yo! Sushi"
-          rating={4.5}
-          genre="Japanese"
-          address="123 Main St."
-          shortDescription="Very famous sushi from UK"
-          dishes={[]}
-          long={20}
-          lat={0}
-        />
+        {restaurants?.map((restaurant, i) => (
+          <RestaurantCard
+            key={`${restaurant._id}-${i}`}
+            id={restaurant._id}
+            imgUrl={restaurant.image}
+            title={restaurant.name}
+            rating={restaurant.rating}
+            genre={restaurant.type?.name}
+            address={restaurant.address}
+            shortDescription={restaurant.short_description}
+            dishes={restaurant.dishes}
+            long={restaurant.long}
+            lat={restaurant.lat}
+          />
+        ))}
       </ScrollView>
     </View>
   );

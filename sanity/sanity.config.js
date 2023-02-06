@@ -16,3 +16,6 @@ export default defineConfig({
     types: schemaTypes,
   },
 })
+
+
+export const urlFor = source => builder.image(source)

@@ -1,9 +1,7 @@
-import { defineType} from 'sanity'
-
-export default defineType({
-  name: 'restaurant',
-  title: 'Restaurant',
-  type: 'document',
+export default {
+  name: "restaurant",
+  title: "Restaurant",
+  type: "document",
   fields: [
     {
       name: "name",
@@ -14,8 +12,8 @@ export default defineType({
     {
       name: "short_description",
       type: "string",
-      title: "Short description",
-      validation: (Rule) => Rule.required(),
+      title: "Restaurant description",
+      validation: (Rule) => Rule.max(200),
     },
     {
       name: "image",
@@ -28,39 +26,38 @@ export default defineType({
       title: "Latitude of the Restaurant",
     },
     {
-      name: "lon",
+      name: "long",
       type: "number",
-      title: "Longtitude of the Restaurant",
+      title: "Longitude of the Restaurant",
     },
     {
       name: "address",
       type: "string",
-      title: "Address of the Restaurant",
+      title: "Restaurant address",
       validation: (Rule) => Rule.required(),
     },
     {
       name: "rating",
       type: "number",
-      title: "Enter a Rating from (1-5 stars)",
-      validation: (Rule) => 
-      Rule.required()
-      .min(1)
-      .max(5)
-      .error("Please enter a value betweeen 1 and 5"),
+      title: "Enter a Rating from (1-5 Stars)",
+      validation: (Rule) =>
+        Rule.required()
+          .min(1)
+          .max(5)
+          .error("Plese enter a Value between 1 and 5"),
     },
     {
       name: "type",
+      type: "reference",
       title: "Category",
-      type: 'reference',
       validation: (Rule) => Rule.required(),
-      to: [{type: 'category'}],
+      to: [{ type: "category" }],
     },
     {
       name: "dishes",
       type: "array",
       title: "Dishes",
-      of: [{type: 'reference', to: [{type: 'dish'}] }],
+      of: [{ type: "reference", to: [{ type: "dish" }] }],
     },
-
   ],
-})
+};
