@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import DishRow from "../components/DishRow";
 import { urlFor } from "../sanity";
 
 const RestaurantScreen = () => {
@@ -82,32 +83,15 @@ const RestaurantScreen = () => {
         </View>
         {dishes?.map((dish) => {
           return (
-            <View className="px-3 py-3 border-t border-b border-gray-200">
-              <View className="flex flex-row justify-between items-start py-2">
-                <View key={dish.id}>
-                  <Text className="font-bold text-[20px] mb-2">
-                    {dish.name}
-                  </Text>
-                  <Text className="w-[200px]">{dish.short_description}</Text>
-                </View>
-                <View className="">
-                  <Image
-                    source={{
-                      uri: urlFor(dish.image).url(),
-                    }}
-                    className="h-24 w-36"
-                  />
-                </View>
-              </View>
-              <View>
-                <Text className="mt-2">{dish.price} Zl.</Text>
-              </View>
-              <View className="mt-3 flex flex-row items-center">
-                <Text className="mr-1">-</Text>
-                <Text className="mr-1">3</Text>
-                <Text>+</Text>
-              </View>
-            </View>
+            <DishRow
+                  key={dish.id}
+                  dish={dish} 
+                  id= {dish.id}
+                  name={dish.name}
+                  description={dish.description}
+                  price={dish.price}
+                  image={dish.image}
+            />
           );
         })}
       </ScrollView>
