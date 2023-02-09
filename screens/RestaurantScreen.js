@@ -9,10 +9,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useSelector } from "react-redux";
+import BasketIcon from "../components/BasketIcon";
 import DishRow from "../components/DishRow";
 import { urlFor } from "../sanity";
 
 const RestaurantScreen = () => {
+  const { items } = useSelector((state) => state.basket);
+
   const navigation = useNavigation();
 
   const {
@@ -38,7 +42,7 @@ const RestaurantScreen = () => {
 
   return (
     <>
-      <ScrollView>
+      <ScrollView className="relative">
         <View className="relative">
           <Image
             source={{
@@ -51,6 +55,9 @@ const RestaurantScreen = () => {
             className="absolute left-3 top-10 p-2 bg-gray-100 rounded-lg"
           >
             <Text>Back</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className="absolute right-3 top-10  rounded-lg">
+            {items.length >= 1 ? <BasketIcon /> : null}
           </TouchableOpacity>
         </View>
         <View className="px-3 pt-4">
@@ -84,13 +91,13 @@ const RestaurantScreen = () => {
         {dishes?.map((dish) => {
           return (
             <DishRow
-                  key={dish.id}
-                  dish={dish} 
-                  id= {dish.id}
-                  name={dish.name}
-                  description={dish.description}
-                  price={dish.price}
-                  image={dish.image}
+              key={dish._id}
+              dish={dish}
+              id={dish._id}
+              name={dish.name}
+              description={dish.description}
+              price={dish.price}
+              image={dish.image}
             />
           );
         })}

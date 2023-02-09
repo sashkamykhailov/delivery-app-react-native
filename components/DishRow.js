@@ -2,17 +2,23 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { urlFor } from "../sanity";
 import { useDispatch, useSelector } from "react-redux";
-import { addToBasket } from '../redux/slices/BasketSlice';
+import { addToBasket, selectBasketItemsWithId, removeFromBasket } from '../redux/slices/BasketSlice';
 
 const DishRow = ({ dish, id, name, description, price, image }) => {
   const [isPressed, setIsPressed] = React.useState(false);
 
   const dispatch = useDispatch();
-  const {items} = useSelector(state => state.basket);
+  const items = useSelector((state) => selectBasketItemsWithId(state, id));
 
   const addItemToBasket = () => {
     dispatch(addToBasket({id, name, description, price, image}));
   }
+ 
+  const removeItemFromBasket = () => {
+    if (!items.length > 0) return;
+
+    dispatch(removeFromBasket({ id }));
+  };
 
   return (
     <>
@@ -41,7 +47,9 @@ const DishRow = ({ dish, id, name, description, price, image }) => {
 
       {isPressed && (
         <View className="px-3 mt-3 flex flex-row items-center mb-2">
-          <TouchableOpacity className="bg-red-600 p-2 rounded-lg">
+          <TouchableOpacity 
+          onPress={removeItemFromBasket}
+          className="bg-red-600 p-2 rounded-lg">
             <Text className="mr-2 text-white font-bold">- 1</Text>
           </TouchableOpacity>
           <Text className="ml-2 mr-2">{items.length}</Text>
