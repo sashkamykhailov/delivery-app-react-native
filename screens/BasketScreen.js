@@ -47,7 +47,7 @@ const BasketScreen = () => {
           >
           </TouchableOpacity>
         </View>
-        <View className='flex-row items-center space-x-4 px-4 py-3 bg-white my-5'>
+        <View className='flex-row items-center justify-center space-x-4 px-4 py-3 bg-white my-5'>
           <Image
             source={{
               uri: 'https://links.papareact.com/wru',
@@ -55,9 +55,6 @@ const BasketScreen = () => {
             className='h-7 w-7 bg-gray-300 p-4 rounded-full'
           />
           <Text className='flex-1'>Deliver in 50-75 min</Text>
-          <TouchableOpacity>
-            <Text className='text-[#00ccbb]'>Change</Text>
-          </TouchableOpacity>
         </View>
         <ScrollView className='divide-y divide-gray-200'>
           {Object.entries(groupedItems).map(([key, items]) => (
